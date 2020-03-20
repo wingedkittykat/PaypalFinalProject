@@ -1,0 +1,1796 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: 'Henkan'
+  description: 'A recycling initiative. Using rags to riches concept to create a company that accepts secondhand clothes as donations and gives access to creators to turn them into new saleable items.'
+  
+# Added by API Auto Mocking Plugin
+servers:
+  - description: Swagger mock server
+    url: https://virtserver.swaggerhub.com/wingedkittykat/Henkan/1.0
+
+paths:
+  
+  '/admin/{username}':
+    get:
+      tags:
+        - admin
+      summary: Access admin profile
+      operationId: getAdmin
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: password
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/admin'
+        400:
+          description: Invalid username
+        408:
+          description: Authentication denied
+  
+  '/admin/{username}/user':
+    get:
+      tags:
+        - admin
+      summary: Gets a list of all users
+      operationId: getUserList
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Profiles found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        404:
+          description:  Users not found
+  
+  '/admin/{username}/donor':
+    get:
+      tags:
+        - admin
+      summary: Gets a list of all donors
+      operationId: getDonorList
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Profiles found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donor'
+        404:
+          description:  Donors not found
+  
+  '/admin/{username}/creator':
+    get:
+      tags:
+        - admin
+      summary: Gets a list of all creators
+      operationId: getCreatorList
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Profiles found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creator'
+        404:
+          description:  Creators not found
+  
+  '/admin/{username}/donation':
+    get:
+      tags:
+        - admin
+      summary: Gets a list of all donations
+      operationId: getDonationList
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Donations found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        404:
+          description:  Donations not found
+  
+  '/admin/{username}/creation':
+    get:
+      tags:
+        - admin
+      summary: Gets a list of all creations
+      operationId: getCreationList
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Creations found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creation'
+        404:
+          description:  Creations not found
+    
+  '/admin/{username}/checkRevenue':
+    get:
+      tags:
+        - admin
+      summary: Gets a list of all payment reciepts and finds revenue insights for the company
+      operationId: getPaymentList
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Receipts found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/receipt'
+        404:
+          description:  receipts not found
+    
+  '/admin/{username}/donation/{donationId}':
+    delete:
+      tags:
+        - admin
+      summary: Admin can delete a donation post
+      operationId: adminDeleteDonation
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: donationId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Deleted Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        404: 
+          description: Donation not found
+  
+  '/admin/{username}/creation/{creationId}':
+    delete:
+      tags:
+        - admin
+      summary: Admin can delete a creation post
+      operationId: adminDeleteCreation
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: creationId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Deleted Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creation'
+        404: 
+          description: Creation not found
+  
+  '/user/{username}':
+    get:
+      tags:
+        - user
+      summary: Access user profile (Buyers)
+      operationId: getUser
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: password
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        400:
+          description: Invalid username
+        408:
+          description: Authentication denied
+    post:
+      tags:
+        - user
+      summary: Add user profile
+      operationId: createUser
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: password
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Profile added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        400:
+          description: Username Unavailable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  description: Username of user
+                  type: string
+                password:
+                  description: Password of user
+                  type: string
+    put:
+      tags:
+        - user
+      summary: Edit user profile
+      operationId: editUser
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: password
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Profile edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        400:
+          description: Username Unavailable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+    delete:
+      tags:
+        - user
+      summary: Delete user profile
+      operationId: deleteUser
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Profile delete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        404:
+          description: Username not found
+  
+  '/donor/{username}':
+    get:
+      tags:
+        - donor
+      summary: Access donor profile (Donating old clothes)
+      operationId: getDonor
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: password
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donor'
+        400:
+          description: Invalid username
+        408:
+          description: Authentication denied
+    post:
+      tags:
+        - donor
+      summary: Add donor profile
+      operationId: createDonor
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: password
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Profile added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donor'
+        400:
+          description: Username Unavailable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  description: Username of donor
+                  type: string
+                password:
+                  description: Password of donor
+                  type: string
+    put:
+      tags:
+        - donor
+      summary: Edit donor profile
+      operationId: editDonor
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: password
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Profile edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donor'
+        400:
+          description: Username Unavailable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/donor'
+    delete:
+      tags:
+        - donor
+      summary: Delete donor profile
+      operationId: deleteDonor
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Profile deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donor'
+
+  '/creator/{username}':
+    get:
+      tags:
+        - creator
+      summary: Access creator profile (Buying donations and creating new clothes from them)
+      operationId: getCreator
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Profile found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creator'
+        400:
+          description: Invalid username
+        408:
+          description: Authentication denied
+    post:
+      tags:
+        - creator
+      summary: Add creator profile
+      operationId: createCreator
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Profile created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creator'
+        400:
+          description: Username Unavailable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  description: Username of creator
+                  type: string
+                password:
+                  description: Password of creator
+                  type: string
+    put:
+      tags:
+        - creator
+      summary: Edit creator profile
+      operationId: editCreator
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: password
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Profile edited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creator'
+        400:
+          description: Username Unavailable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/creator'
+    delete:
+      tags:
+        - creator
+      summary: Delete creator profile
+      operationId: deleteCreator
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Profile deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creator'
+        404:
+          description: Username not found
+  
+  '/donor/{username}/Donation/{donationId}':
+    post:
+      tags:
+        - donor
+      summary: Add a donation
+      operationId: addDonation
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: donationId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Donation added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        400:
+          description: Invalid inputs
+        405:
+          description: Request failed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/donation'
+    put:
+      tags:
+        - donor
+      summary: Updates an existing donation
+      operationId: updateDonation
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: donationId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Updated donation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        404: 
+          description: Donation not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/donation'
+    delete:
+      tags:
+        - donor
+      summary: Deletes an existing donation
+      operationId: deleteDonation
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: donationId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Donation deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        404: 
+          description: Donation not found
+  
+  '/donor/{username}/checkRevenue':
+    get:
+      tags:
+        - donor
+      summary: Gets a list of payment reciepts for donations and finds revenue insights for the donor
+      operationId: getDonationRevenue
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Receipts found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/receipt'
+        404:
+          description:  receipts not found
+  
+  '/creator/{username}/creation/{creationId}':
+    post:
+      tags:
+        - creator
+      summary: Add a creation (Unique clothes/bags etc. made from reused donations)
+      operationId: addCreation
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: creationId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Creation added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creation'
+        400:
+          description: Invalid inputs
+        405:
+          description: Request failed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/creation'
+    put:
+      tags:
+        - creator
+      summary: Updates an existing creation
+      operationId: updateCreation
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: creationId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Creation updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creation'
+        404: 
+          description: Creation not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/creation'
+    delete:
+      tags:
+        - creator
+      summary: Deletes an existing creation
+      operationId: deleteCreation
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: creationId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Creation deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creation'
+        404: 
+          description: Creation not found
+  
+  '/creator/{username}/donationsByTag':
+    get:
+      tags:
+        - creator
+      summary: Get donations based on tags
+      operationId: donationByTag
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: tag
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Donations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        400:
+          description: Invalid tag
+        404: 
+          description: Tag not found
+    
+  '/creator/{username}/donationsByStatus':
+    get:
+      tags:
+        - creator
+      summary: Get donations based on Status
+      operationId: donationByStatus
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: status
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Donations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        400:
+          description: Invalid status
+        404: 
+          description: Status not found
+  
+  '/creator/{username}/donationsById':
+    get:
+      tags:
+        - creator
+      summary: Get donations based on id
+      operationId: donationById
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: id
+          required: true
+          schema:
+            type: number
+          in: query
+      responses:
+        200:
+          description: Donations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        400:
+          description: Invalid id
+        404: 
+          description: Id not found
+    
+  '/creator/{username}/donationsByDonor':
+    get:
+      tags:
+        - creator
+      summary: Get Donations based on donor
+      operationId: DonationsByDonor
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: donor
+          required: true
+          schema:
+            $ref: '#/components/schemas/donor'
+          in: query
+      responses:
+        200:
+          description: Donations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        400:
+          description: Invalid donor
+        404: 
+          description: Donor not found
+  
+  '/creator/{username}/donationsByDonorRating':
+    get:
+      tags:
+        - creator
+      summary: Get donations posted by donors with rating higher than given donor rating
+      operationId: donationByRating
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: rating
+          required: true
+          schema:
+            type: number
+          in: query
+      responses:
+        200:
+          description: Donations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        400:
+          description: Invalid rating
+        404: 
+          description: rating not found
+  
+  '/creator/{username}/cart':
+    get:
+      tags:
+        - creator
+      summary: View creator's cart
+      operationId: viewCreatorCart
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+          200:
+            description: Successfully displayed cart
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/creatorCart'
+          400:
+            description: Operation failed
+          404: 
+            description: User not found 
+  
+  '/creator/{username}/cart/{itemId}':
+    post:
+      tags:
+        - creator
+      summary: Add an item to creator's cart
+      operationId: addToCart
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: itemId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Successfully added donation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creatorCart'
+        400:
+          description: Operation failed!
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/creatorCart'
+    put:
+      tags:
+        - creator
+      summary: Updates an item in creator's cart
+      operationId: updateCreatorCart
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: itemId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Cart updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        404: 
+          description: Item not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/donation'
+    delete:
+      tags:
+        - creator
+      summary: Deletes an item from creator's cart
+      operationId: deletefromCreatorCart
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: itemId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Item deleted
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/donation'
+        404: 
+          description: Item not found
+  
+  '/creator/{username}/cart/payment':
+    post:
+      tags:
+        - creator
+      summary: Make payment
+      operationId: creatorPayment
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200: 
+          description: Payment successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment'
+        400:
+          description: Payment failed
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/payment'
+  
+  '/creator/{username}/cart/payment/getReciept':
+    get:
+      tags:
+        - creator
+      summary: Generate reciept for creator
+      operationId: getcreatorReciept
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Reciept generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/receipt'
+        400:
+          description: Generation error
+        404:
+          description: Reciept not found
+  
+  '/creator/{username}/checkRevenue':
+    get:
+      tags:
+        - creator
+      summary: Gets a list of all payment reciepts for creations by creator and finds payment insights
+      operationId: getCreationsRevenue
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Receipts found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/receipt'
+        404:
+          description:  receipts not found
+  
+  '/user/{username}/creationsByTag':
+    get:
+      tags:
+        - user
+      summary: Get unique creations based on tags
+      operationId: creationByTag
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: tag
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Creations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creation'
+        400:
+          description: Invalid tag
+        404: 
+          description: Tag not found
+    
+  '/user/{username}/creationByStatus':
+    get:
+      tags:
+        - user
+      summary: Get creations based on Status
+      operationId: creationByStatus
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: status
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Creations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creation'
+        400:
+          description: Invalid status
+        404: 
+          description: Status not found
+  
+  '/user/{username}/creationsById':
+    get:
+      tags:
+        - user
+      summary: Get creations based on id
+      operationId: creationById
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: id
+          required: true
+          schema:
+            type: number
+          in: query
+      responses:
+        200:
+          description: Creation found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creation'
+        400:
+          description: Invalid id
+        404: 
+          description: Id not found
+  
+  '/user/{username}/creationsByCreator':
+    get:
+      tags:
+        - user
+      summary: Get Creations based on creator
+      operationId: creationsByCreator
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: creator
+          required: true
+          schema:
+            $ref: '#/components/schemas/creator'
+          in: query
+      responses:
+        200:
+          description: Creations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creation'
+        400:
+          description: Invalid creator
+        404: 
+          description: Creator not found
+  
+  '/user/{username}/creationsBycreatorRating':
+    get:
+      tags:
+        - user
+      summary: Get creations posted by creators with rating higher than given creator rating
+      operationId: creationByRating
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: rating
+          required: true
+          schema:
+            type: number
+          in: query
+      responses:
+        200:
+          description: Creations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/creation'
+        400:
+          description: Invalid rating
+        404: 
+          description: rating not found
+  
+  '/user/{username}/shDonationsByTag':
+    get:
+      tags:
+        - user
+      summary: Get secondhand Donations based on tags
+      operationId: shDonationsByTag
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: tag
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Donations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        400:
+          description: Invalid tag
+        404: 
+          description: Tag not found
+    
+  '/user/{username}/shDonationsByStatus':
+    get:
+      tags:
+        - user
+      summary: Get secondhand Donations based on Status
+      operationId: shDonationsByStatus
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: status
+          required: true
+          schema:
+            type: string
+          in: query
+      responses:
+        200:
+          description: Donations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        400:
+          description: Invalid status
+        404: 
+          description: Status not found
+  
+  '/user/{username}/shDonationsById':
+    get:
+      tags:
+        - user
+      summary: Get secondhand Donations based on id
+      operationId: shDonationsById
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: id
+          required: true
+          schema:
+            type: number
+          in: query
+      responses:
+        200:
+          description: Donations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        400:
+          description: Invalid id
+        404: 
+          description: Id not found
+          
+  '/user/{username}/shDonationsByDonor':
+    get:
+      tags:
+        - user
+      summary: Get secondhand Donations based on donor
+      operationId: shDonationsByDonor
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: donor
+          required: true
+          schema:
+            $ref: '#/components/schemas/donor'
+          in: query
+      responses:
+        200:
+          description: Donations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        400:
+          description: Invalid donor
+        404: 
+          description: Donor not found
+  
+  '/user/{username}/shdonationsByDonorRating':
+    get:
+      tags:
+        - user
+      summary: Get secondhand donations posted by donors with rating higher than given donor rating
+      operationId: shdonationByRating
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: rating
+          required: true
+          schema:
+            type: number
+          in: query
+      responses:
+        200:
+          description: Donations found
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/donation'
+        400:
+          description: Invalid rating
+        404: 
+          description: rating not found
+          
+  '/user/{username}/cart':
+    get:
+      tags:
+        - user
+      summary: View user's cart
+      operationId: viewUserCart
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+          200:
+            description: Successfully displayed cart
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/userCart'
+          400:
+            description: Operation failed
+          404: 
+            description: User not found 
+
+  '/user/{username}/cart/{itemId}':
+    post:
+      tags:
+        - user
+      summary: Add an item to user's cart
+      operationId: addToUserCart
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: itemId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Successfully added donation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userCart'
+        400:
+          description: Operation failed!
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userCart'
+    put:
+      tags:
+        - user
+      summary: Updates an item in  user's cart
+      operationId: updateUserCart
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: itemId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Cart updated
+          content:
+            application/json:
+              schema:
+                enum:
+                  - $ref: '#/components/schemas/creation'
+                  - $ref: '#/components/schemas/donation'
+        404: 
+          description: Item not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              enum:
+                  - $ref: '#/components/schemas/creation'
+                  - $ref: '#/components/schemas/donation'
+    delete:
+      tags:
+        - user
+      summary: Deletes an item from user's cart
+      operationId: deletefromUserCart
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+        - name: itemId
+          required: true
+          schema:
+            type: number
+          in: path
+      responses:
+        200:
+          description: Item deleted
+          content:
+            application/json:
+              schema:
+                enum:
+                  - $ref: '#/components/schemas/creation'
+                  - $ref: '#/components/schemas/donation'
+        404: 
+          description: Item not found
+  
+  '/user/{username}/cart/payment':
+    post:
+      tags:
+        - user
+      summary: Make payment
+      operationId: userPayment
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200: 
+          description: Payment successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/payment'
+        400:
+          description: Payment failed
+      requestBody:
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/payment'
+  
+  '/user/{username}/cart/payment/getReciept':
+    get:
+      tags:
+        - user
+      summary: Generate reciept
+      operationId: getReciept
+      parameters:
+        - name: username
+          required: true
+          schema:
+            type: string
+          in: path
+      responses:
+        200:
+          description: Reciept generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/receipt'
+        400:
+          description: Genration error
+        404:
+          description: Reciept not found
+      
+
+
+components:
+  schemas:
+    admin:
+      type: object
+      properties:
+        username:
+          type: string
+          example: Divya
+        password:
+          type: string
+          example: dskria
+    user:
+      type: object
+      properties:
+        username:
+          type: string
+          example: kriti
+        password:
+          type: string
+          example: qwerty
+        address:
+          type: string
+          example: 678 street
+          
+    donor:
+      type: object
+      properties:
+        username:
+          type: string
+          example: aryan
+        password:
+          type: string  
+          example: asdfg
+        address:
+          type: string
+          example: 123 street
+        donorRating:
+          type: number
+          example: 4.5
+        donations:
+          type: array
+          items:
+            $ref: '#/components/schemas/donation'
+            
+    creator:
+      type: object
+      properties:
+        username:
+          type: string
+          example: Rhea
+        password:
+          type: string 
+          example: zxcvb
+        address:
+          type: string
+          example: 895 street
+        creatorRating:
+          type: number
+          example: 4.2
+        creations:
+          type: array
+          items:
+            $ref: "#/components/schemas/creation"
+            
+    donation:
+      type: object
+      properties:
+        donationId:
+          type: number
+          example: 12
+        photoUrls:
+          type: array
+          xml:
+            name: photoUrl
+            wrapped: true
+          items:
+            type: string
+        descriptions: 
+          type: string
+          example: yellow tshirt
+        size: 
+          type: object
+          enum:
+            - $ref: '#/components/schemas/stringsize'
+            - $ref: '#/components/schemas/numsize'
+        donor:
+          $ref: '#/components/schemas/donor'
+        status: 
+          type: string
+          enum:
+            - ReusableAsIs
+            - NeedsMending
+            - UseForScrap
+          example: NeedsMending
+        tags:
+          type: array
+          items: 
+            type: string
+            example: yellow
+        price:
+          type: number
+          example: 200
+        soldStatus:
+          type: string
+          enum:
+            - Sold
+            - Available
+          example: Available
+          
+    creation:
+      type: object
+      properties:
+        creationId:
+          type: number
+          example: 456
+        photoUrls:
+          type: array
+          xml:
+            name: photoUrl
+            wrapped: true
+          items:
+            type: string
+        descriptions:
+          type: string
+          example: Small yellow slingbag
+        size: 
+          type: object
+          enum:
+            - $ref: '#/components/schemas/stringsize'
+            - $ref: '#/components/schemas/numsize'
+        creator:
+          $ref: '#/components/schemas/creator'
+        tags:
+          type: array
+          items:
+            type: string
+            example: cute
+        price: 
+          type: number
+          example: 350
+        soldStatus:
+          type: string
+          enum:
+            - Sold
+            - Available
+          example: Available
+          
+    creatorCart:
+      type: object
+      properties:
+        donations:
+          type: array
+          items:
+            $ref: '#/components/schemas/donation'
+        similarRecommendations:
+          type: array
+          items:
+            $ref: '#/components/schemas/donation'
+        totalPrice:
+          type: number
+          example: 500
+          
+    userCart:
+      type: object
+      properties:
+        creations:
+          type: array
+          items:
+            $ref: '#/components/schemas/creation'
+        secondhandDonations:
+          type: array
+          items:
+            $ref: '#/components/schemas/donation'
+        similarRecommendations:
+          type: array
+          items:
+            $ref: '#/components/schemas/donation'
+        totalPrice:
+          type: number
+          example: 500
+    
+    payment:
+      type: object
+      properties:
+        orderedItems:
+          type: array
+          items:
+            enum:
+              - $ref: '#/components/schemas/creation'
+              - $ref: '#/components/schemas/donation'
+        total: 
+          type: number
+          example: 525
+        paymentMode:
+          type: string
+          enum:
+            - Debit Card
+            - Credit Card
+            - UPI
+            - Paypal
+            - Cash
+          example: Paypal
+        deliveryAddress:
+          type: string
+          example: 237 street
+          
+    receipt:
+      type: object
+      properties:
+        recieptNumber:
+          type: number
+          example: 3908
+        itemList:
+          type: array
+          items:
+            enum:
+              - $ref: '#/components/schemas/donation'
+              - $ref: '#/components/schemas/creation'
+        totalPrice:
+          type: number
+        status:
+          type: string
+          enum:
+            - Paid
+            - Payment Pending
+            - Unpaid
+    
+    stringsize:
+      type: string
+      enum:
+        - XS
+        - S
+        - M
+        - L
+        - XL
+        - XL
+        - XXL
+        - XXXL
+      example: S
+        
+    numsize:
+      type: number
+      example: 10
